@@ -62,3 +62,7 @@ This repo is used as a part of a zicare backend test, Used Fastapi and pydantic 
             INFO  [alembic.runtime.migration] Context impl MySQLImpl.
             INFO  [alembic.runtime.migration] Will assume transactional DDL.
             INFO  [alembic.runtime.migration] Running upgrade  -> version, version_command
+            
+            
+## Showing
+    ![screencapture_swagger_zicare](https://user-images.githubusercontent.com/49240658/126899903-1dc33874-a8de-4d1f-9363-c3908f79d21f.jpeg)
