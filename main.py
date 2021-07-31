@@ -26,6 +26,10 @@ app.add_middleware(DBSessionMiddleware, db_url=os.environ["DATABASE_URL"])
 # Create
 @app.post("/patient/", response_model=SchemaPatient)
 def patient_add(patient: SchemaPatient):
+    check_ktp = db.session.query(ModelPatient).filter_by(ktp=patient.ktp).first()
+    if check_ktp:
+        raise HTTPException(status_code=404, detail="KTP already exists") # make response if found
+        
     db_patient = ModelPatient(
         ktp=patient.ktp,
         full_name=patient.full_name,
@@ -49,7 +53,11 @@ def patient_list(patient_id: Optional[int]=None, active: bool=None, offset: int=
     if active is not None : patient = patient.filter_by(is_active=active)
 
     # Dynamic sorting
-    response = patient.order_by(eval(sort_type.name)(sort_by)).limit(limit).offset(offset).all()    # read execute
+    db_pattient = patient.order_by(eval(sort_type.name)(sort_by))    # read execute
+    
+    count = db_pattient.count()
+    data = db_pattient.limit(limit).offset(offset).all()
+    response = {"data": data, "offset": offset, "limit": limit, "total":count}
 
     return response
 
@@ -68,6 +76,12 @@ def patient_update(patient_id: int, patient: SchemaPatientUpdate):
     save_to_db.update( (k,v) for k,v in patient.__dict__.items() if v is not None ) # Data update from payload
     save_to_db.update( {'modified_date': datetime.now()} )
 
+    # Check existing ktp
+    check_ktp = db.session.query(ModelPatient).filter_by(ktp=save_to_db.get('ktp')).first()
+    if check_ktp:
+        if check_ktp.id != patient_id:
+            raise HTTPException(status_code=404, detail="KTP already exists") # make response if not found
+    
     db_patient.update(save_to_db)
     db.session.commit()     # update execute
 

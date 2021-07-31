@@ -1,6 +1,4 @@
-from datetime import date, datetime
-
-from sqlalchemy.sql.sqltypes import Boolean
+from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 
@@ -14,15 +12,12 @@ class User(BaseModel):
         orm_mode = True
 
 class Patient(BaseModel):
+    id: Optional[int] = None
     ktp: int
     full_name: str
     first_name: str
     last_name: str
     address: str
-
-    # created_date: datetime
-    # modified_date:datetime
-    # is_active: bool
 
     class Config:
         orm_mode = True
