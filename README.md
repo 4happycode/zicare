@@ -27,7 +27,7 @@ This repo is used as a part of a zicare backend test, Used Fastapi and pydantic 
 
     Change database connection (database_name, username, password)
         - overwrite file .env
-            DATABASE_URL=mysql+pymysql://your_username:your_password@localhost:3306/your_database_name
+            DATABASE_URL=mariadb+mariadbconnector://your_username:your_password@localhost:3306/your_database_name
 
         - overwrite file alembic.ini
             sqlalchemy.url = driver://your_username:your_password@localhost:3306/your_database_name
